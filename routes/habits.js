@@ -1,7 +1,11 @@
 import express from "express";
 const router = express.Router();
-import { getHabits } from "../controllers/habits.controller.js";
+import {
+  selectHabits,
+  insertHabits,
+} from "../controllers/habits.controller.js";
 
-router.get("/", getHabits);
+router.get("/", selectHabits);
+router.post("/", insertHabits);
 
 export { router };
