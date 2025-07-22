@@ -14,10 +14,10 @@ const insertHabits = async (req, res) => {
       "INSERT INTO habits (habit, completed, user_id) VALUES (?, ?, ?)",
       [habit, completed, user_id]
     );
-    res.status(201).json({ result });
+    res.status(201).json({ id: result.insertId, habit, completed, user_id });
   } catch (error) {
     console.error("Error at inserting habit: ", error);
-    res.status(500).json({ error: "Error at inserting habit: " });
+    res.status(500).send(error.message);
   }
 };
 
