@@ -14,4 +14,4 @@ app.listen(PORT, () => {
   console.log(`Server running on port: ${PORT}`);
 });
 
-app.use("/", habits);
+app.use("/api/habits", habits);

@@ -1,7 +1,13 @@
 import { pool } from "../helpers/mysql-config.js";
 
-const selectHabits = (req, res) => {
-  res.json({ habit1: "false" });
+const selectHabits = async (req, res) => {
+  const { id } = req.params;
+  const [habits] = await pool.query(
+    "SELECT * FROM habits WHERE user_id=? ORDER BY date DESC",
+    [id]
+  );
+  const selectedHabits = habits[0];
+  res.json(selectedHabits);
 };
 
 const insertHabits = async (req, res) => {
@@ -14,9 +20,15 @@ const insertHabits = async (req, res) => {
       "INSERT INTO habits (habit, completed, user_id) VALUES (?, ?, ?)",
       [habit, completed, user_id]
     );
-    res.status(201).json({ id: result.insertId, habit, completed, user_id });
+    res.status(201).json({
+      id: result.insertId,
+      habit,
+      completed,
+      date: new Date(),
+      user_id,
+    });
   } catch (error) {
-    console.error("Error at inserting habit: ", error);
+    console.error("Error at inserting habit", error);
     res.status(500).send(error.message);
   }
 };
