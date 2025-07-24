@@ -32,4 +32,23 @@ const insertHabits = async (req, res) => {
   }
 };
 
-export { selectHabits, insertHabits };
+const updateHabitsCompletion = async (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).json({ error: "Enter habit id" });
+    }
+    const [result] = await pool.query(
+      "UPDATE habits SET completed=NOT completed WHERE id=?",
+      [id]
+    );
+    res.status(201).json({
+      result,
+    });
+  } catch (error) {
+    console.error("Error at updating habit completion", error);
+    res.status(500).send(error.message);
+  }
+};
+
+export { selectHabits, insertHabits, updateHabitsCompletion };
