@@ -2,12 +2,12 @@ import express from "express";
 const router = express.Router();
 import {
   selectHabits,
-  insertHabits,
-  updateHabitsCompletion,
+  insertHabit,
+  updateHabitCompletion,
 } from "../controllers/habits.controller.js";
 
 router.get("/", selectHabits);
-router.post("/", insertHabits);
-router.patch("/", updateHabitsCompletion);
+router.post("/", insertHabit);
+router.patch("/", updateHabitCompletion);
 
 export { router };

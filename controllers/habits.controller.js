@@ -1,15 +1,15 @@
 import { pool } from "../helpers/mysql-config.js";
 
 const selectHabits = async (req, res) => {
-  const { id } = req.body;
+  const { user_id } = req.body;
   const [habits] = await pool.query(
     "SELECT * FROM habits WHERE user_id=? ORDER BY date DESC",
-    [id]
+    [user_id]
   );
   res.json({ habits });
 };
 
-const insertHabits = async (req, res) => {
+const insertHabit = async (req, res) => {
   try {
     const { habit, completed, user_id } = req.body;
     if (!habit || !completed || !user_id) {
@@ -32,7 +32,7 @@ const insertHabits = async (req, res) => {
   }
 };
 
-const updateHabitsCompletion = async (req, res) => {
+const updateHabitCompletion = async (req, res) => {
   try {
     const { id } = req.body;
     if (!id) {
@@ -51,4 +51,4 @@ const updateHabitsCompletion = async (req, res) => {
   }
 };
 
-export { selectHabits, insertHabits, updateHabitsCompletion };
+export { selectHabits, insertHabit, updateHabitCompletion };
