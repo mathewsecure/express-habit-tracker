@@ -5,8 +5,9 @@ import {
   insertHabit,
   updateHabitCompletion,
 } from "../controllers/habits.controller.js";
+import { middleware } from "../middleware/jwt.middleware.js";
 
-router.get("/", selectHabits);
+router.get("/", middleware, selectHabits);
 router.post("/", insertHabit);
 router.patch("/", updateHabitCompletion);
 
