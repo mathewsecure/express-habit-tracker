@@ -1,11 +1,18 @@
 import { pool } from "../helpers/mysql-config.js";
 
 const selectHabits = async (req, res) => {
-  const { user_id } = req.body;
+  //TODO: fix habits query
+  const { email } = req.email;
+  console.log(email);
+  const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+    email,
+  ]);
+  console.log(user_id);
   const [habits] = await pool.query(
     "SELECT * FROM habits WHERE user_id=? ORDER BY date DESC",
     [user_id]
   );
+  console.log(habits);
   res.json({ habits });
 };
 

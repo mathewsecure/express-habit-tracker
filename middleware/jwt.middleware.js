@@ -13,7 +13,6 @@ const authenticateJWT = (req, res, next) => {
       else next();
       // Get email from JWT and expose it to request object
       req.email = { email: decoded.email };
-      console.log(req.email);
     });
   } else {
     return res.status(401).send({ mensaje: "No token proportionated" });
