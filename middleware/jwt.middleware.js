@@ -11,6 +11,9 @@ const authenticateJWT = (req, res, next) => {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) return res.status(403).json({ mensaje: "Invalid token" });
       else next();
+      // Get email from JWT and expose it to request object
+      req.email = { email: decoded.email };
+      console.log(req.email);
     });
   } else {
     return res.status(401).send({ mensaje: "No token proportionated" });
