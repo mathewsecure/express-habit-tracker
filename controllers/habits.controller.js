@@ -54,4 +54,27 @@ const updateHabitCompletion = async (req, res) => {
   }
 };
 
-export { selectHabits, insertHabit, updateHabitCompletion };
+const updateHabitName = async (req, res) => {
+  try {
+    const { id, habitNameReplacement } = req.body;
+    if (!id || !habitNameReplacement) {
+      return res
+        .status(400)
+        .json({ error: "Enter habit id and habit name replacement" });
+    }
+    const [result] = await pool.query("UPDATE habits SET habit=? WHERE id=?", [
+      habitNameReplacement,
+      id,
+    ]);
+    res.status(201).json({
+      id,
+      habitNameReplacement,
+    });
+  } catch (error) {
+    console.error("Error at updating habit name replacement", error);
+    res.status(500).send(error.message);
+  }
+};
+const deleteHabit = () => {};
+
+export { selectHabits, insertHabit, updateHabitCompletion, updateHabitName };
