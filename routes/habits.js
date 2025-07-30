@@ -5,12 +5,14 @@ import {
   insertHabit,
   updateHabitCompletion,
   updateHabitName,
+  deleteHabit,
 } from "../controllers/habits.controller.js";
 import { middleware } from "../middleware/jwt.middleware.js";
 
 router.get("/", middleware, selectHabits);
 router.post("/", insertHabit);
-router.patch("/", updateHabitCompletion);
+router.put("/", updateHabitCompletion);
 router.patch("/", updateHabitName);
+router.delete("/", deleteHabit);
 
 export { router };

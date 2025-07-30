@@ -46,7 +46,7 @@ const updateHabitCompletion = async (req, res) => {
       [id]
     );
     res.status(201).json({
-      result,
+      "updated habit id completion": id,
     });
   } catch (error) {
     console.error("Error at updating habit completion", error);
@@ -67,14 +67,34 @@ const updateHabitName = async (req, res) => {
       id,
     ]);
     res.status(201).json({
-      id,
-      habitNameReplacement,
+      "updated id": id,
+      "updated habit name": habitNameReplacement,
     });
   } catch (error) {
     console.error("Error at updating habit name replacement", error);
     res.status(500).send(error.message);
   }
 };
-const deleteHabit = () => {};
 
-export { selectHabits, insertHabit, updateHabitCompletion, updateHabitName };
+const deleteHabit = async (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).json({ error: "Enter habit id" });
+    }
+    const [result] = await pool.query("DELETE FROM habits WHERE id=?", [id]);
+    res.status(201).json({
+      "deleted habit": id,
+    });
+  } catch (error) {
+    console.error("Error at updating habit completion", error);
+    res.status(500).send(error.message);
+  }
+};
+export {
+  selectHabits,
+  insertHabit,
+  updateHabitCompletion,
+  updateHabitName,
+  deleteHabit,
+};
