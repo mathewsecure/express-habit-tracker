@@ -1,7 +1,7 @@
 import { pool } from "../helpers/mysql-config.js";
 import jwt from "jsonwebtoken";
 
-const doLogin = async (req, res) => {
+const login = async (req, res) => {
   try {
     let token = "";
     let result = "";
@@ -27,4 +27,24 @@ const doLogin = async (req, res) => {
   }
 };
 
-export { doLogin };
+const signUp = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    //TODO: add validations
+    if (!email || !password) {
+      return res.status(400).json({ error: "Enter all fields" });
+    }
+    const [result] = await pool.query(
+      "INSERT INTO users (email, password) VALUES (?, SHA2(?,224))",
+      [email, password]
+    );
+    res.status(201).json({
+      "Succesfully registered": email,
+    });
+  } catch (error) {
+    console.error("Error at registering", error);
+    res.status(500).send(error.message);
+  }
+};
+
+export { login, signUp };
