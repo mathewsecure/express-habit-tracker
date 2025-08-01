@@ -11,8 +11,8 @@ import { middleware } from "../middleware/jwt.middleware.js";
 
 router.get("/", middleware, selectHabits);
 router.post("/", insertHabit);
-router.put("/", updateHabitCompletion);
+router.put("/:id", updateHabitCompletion);
 router.patch("/", updateHabitName);
-router.delete("/", deleteHabit);
+router.delete("/:id", deleteHabit);
 
 export { router };

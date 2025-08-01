@@ -37,14 +37,13 @@ const insertHabit = async (req, res) => {
 
 const updateHabitCompletion = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id) {
       return res.status(400).json({ error: "Enter habit id" });
     }
-    const [result] = await pool.query(
-      "UPDATE habits SET completed=NOT completed WHERE id=?",
-      [id]
-    );
+    await pool.query("UPDATE habits SET completed=NOT completed WHERE id=?", [
+      id,
+    ]);
     res.status(201).json({
       "updated habit id completion": id,
     });
@@ -62,7 +61,7 @@ const updateHabitName = async (req, res) => {
         .status(400)
         .json({ error: "Enter habit id and habit name replacement" });
     }
-    const [result] = await pool.query("UPDATE habits SET habit=? WHERE id=?", [
+    await pool.query("UPDATE habits SET habit=? WHERE id=?", [
       habitNameReplacement,
       id,
     ]);
@@ -78,11 +77,11 @@ const updateHabitName = async (req, res) => {
 
 const deleteHabit = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id) {
       return res.status(400).json({ error: "Enter habit id" });
     }
-    const [result] = await pool.query("DELETE FROM habits WHERE id=?", [id]);
+    await pool.query("DELETE FROM habits WHERE id=?", [id]);
     res.status(201).json({
       "deleted habit": id,
     });
