@@ -14,7 +14,7 @@ const login = async (req, res) => {
 
     if (rows[0].quantity === 1) {
       token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: 600,
+        expiresIn: "7d",
       });
       result = { token: token, message: "User authenticated" };
     } else {

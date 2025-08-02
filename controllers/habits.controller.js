@@ -14,13 +14,17 @@ const selectHabits = async (req, res) => {
 
 const insertHabit = async (req, res) => {
   try {
-    const { habit, completed, user_id } = req.body;
-    if (!habit || !completed || !user_id) {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const { habit, completed } = req.body;
+    if (!habit || !completed) {
       return res.status(400).json({ error: "Enter all fields" });
     }
     const [result] = await pool.query(
       "INSERT INTO habits (habit, completed, user_id) VALUES (?, ?, ?)",
-      [habit, completed, user_id]
+      [habit, completed, user_id[0].id]
     );
     res.status(201).json({
       id: result.insertId,
@@ -37,13 +41,18 @@ const insertHabit = async (req, res) => {
 
 const updateHabitCompletion = async (req, res) => {
   try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({ error: "Enter habit id" });
     }
-    await pool.query("UPDATE habits SET completed=NOT completed WHERE id=?", [
-      id,
-    ]);
+    await pool.query(
+      "UPDATE habits SET completed=NOT completed WHERE id=? AND user_id=?",
+      [id, user_id[0].id]
+    );
     res.status(201).json({
       "updated habit id completion": id,
     });
@@ -55,15 +64,20 @@ const updateHabitCompletion = async (req, res) => {
 
 const updateHabitName = async (req, res) => {
   try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
     const { id, habitNameReplacement } = req.body;
     if (!id || !habitNameReplacement) {
       return res
         .status(400)
         .json({ error: "Enter habit id and habit name replacement" });
     }
-    await pool.query("UPDATE habits SET habit=? WHERE id=?", [
+    await pool.query("UPDATE habits SET habit=? WHERE id=? AND user_id=?", [
       habitNameReplacement,
       id,
+      user_id[0].id,
     ]);
     res.status(201).json({
       "updated id": id,
@@ -77,16 +91,28 @@ const updateHabitName = async (req, res) => {
 
 const deleteHabit = async (req, res) => {
   try {
+    /*
+    TODO: implementation of less repetitive code
+  select user_id of email
+  DELETE FROM habits WHERE id=? and user_id =? <-- check how to do it without repeating code like in selectHabits function
+   */
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({ error: "Enter habit id" });
     }
-    await pool.query("DELETE FROM habits WHERE id=?", [id]);
+    await pool.query("DELETE FROM habits WHERE id=? AND user_id=?", [
+      id,
+      user_id[0].id,
+    ]);
     res.status(201).json({
       "deleted habit": id,
     });
   } catch (error) {
-    console.error("Error at updating habit completion", error);
+    console.error("Error at deleting habit", error);
     res.status(500).send(error.message);
   }
 };
