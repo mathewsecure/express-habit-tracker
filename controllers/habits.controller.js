@@ -26,13 +26,7 @@ const insertHabit = async (req, res) => {
       "INSERT INTO habits (habit, completed, user_id) VALUES (?, ?, ?)",
       [habit, completed, user_id[0].id]
     );
-    res.status(201).json({
-      id: result.insertId,
-      habit,
-      completed,
-      date: new Date(),
-      user_id,
-    });
+    res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
     console.error("Error at inserting habit", error);
     res.status(500).send(error.message);
@@ -49,13 +43,11 @@ const updateHabitCompletion = async (req, res) => {
     if (!id) {
       return res.status(400).json({ error: "Enter habit id" });
     }
-    await pool.query(
+    const [result] = await pool.query(
       "UPDATE habits SET completed=NOT completed WHERE id=? AND user_id=?",
       [id, user_id[0].id]
     );
-    res.status(201).json({
-      "updated habit id completion": id,
-    });
+    res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
     console.error("Error at updating habit completion", error);
     res.status(500).send(error.message);
@@ -74,15 +66,11 @@ const updateHabitName = async (req, res) => {
         .status(400)
         .json({ error: "Enter habit id and habit name replacement" });
     }
-    await pool.query("UPDATE habits SET habit=? WHERE id=? AND user_id=?", [
-      habitNameReplacement,
-      id,
-      user_id[0].id,
-    ]);
-    res.status(201).json({
-      "updated id": id,
-      "updated habit name": habitNameReplacement,
-    });
+    const [result] = await pool.query(
+      "UPDATE habits SET habit=? WHERE id=? AND user_id=?",
+      [habitNameReplacement, id, user_id[0].id]
+    );
+    res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
     console.error("Error at updating habit name replacement", error);
     res.status(500).send(error.message);
@@ -104,13 +92,11 @@ const deleteHabit = async (req, res) => {
     if (!id) {
       return res.status(400).json({ error: "Enter habit id" });
     }
-    await pool.query("DELETE FROM habits WHERE id=? AND user_id=?", [
-      id,
-      user_id[0].id,
-    ]);
-    res.status(201).json({
-      "deleted habit": id,
-    });
+    const [result] = await pool.query(
+      "DELETE FROM habits WHERE id=? AND user_id=?",
+      [id, user_id[0].id]
+    );
+    res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
     console.error("Error at deleting habit", error);
     res.status(500).send(error.message);
