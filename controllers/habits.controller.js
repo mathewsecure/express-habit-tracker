@@ -1,15 +1,20 @@
 import { pool } from "../helpers/mysql-config.js";
 
 const selectHabits = async (req, res) => {
-  const { email } = req.email;
-  const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
-    email,
-  ]);
-  const [habits] = await pool.query(
-    "SELECT * FROM habits WHERE user_id=? ORDER BY date DESC",
-    [user_id[0].id]
-  );
-  res.json({ habits });
+  try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const [habits] = await pool.query(
+      "SELECT * FROM habits WHERE user_id=? ORDER BY date DESC",
+      [user_id[0].id]
+    );
+    res.json({ habits });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error at getting habits" });
+  }
 };
 
 const insertHabit = async (req, res) => {
@@ -28,8 +33,8 @@ const insertHabit = async (req, res) => {
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
-    console.error("Error at inserting habit", error);
-    res.status(500).send(error.message);
+    console.log(error);
+    res.status(500).json({ error: "Error at inserting habit" });
   }
 };
 
@@ -49,8 +54,8 @@ const updateHabitCompletion = async (req, res) => {
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
-    console.error("Error at updating habit completion", error);
-    res.status(500).send(error.message);
+    console.log(error);
+    res.status(500).json({ error: "Error at updating habit completion" });
   }
 };
 
@@ -72,8 +77,8 @@ const updateHabitName = async (req, res) => {
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
-    console.error("Error at updating habit name replacement", error);
-    res.status(500).send(error.message);
+    console.log(error);
+    res.status(500).json({ error: "Error at updating habit name" });
   }
 };
 
@@ -98,8 +103,8 @@ const deleteHabit = async (req, res) => {
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
-    console.error("Error at deleting habit", error);
-    res.status(500).send(error.message);
+    console.log(error);
+    res.status(500).json({ error: "Error at deleting habit" });
   }
 };
 export {

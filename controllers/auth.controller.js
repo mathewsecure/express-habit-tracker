@@ -42,8 +42,8 @@ const signUp = async (req, res) => {
       "Succesfully registered": email,
     });
   } catch (error) {
-    console.error("Error at registering", error);
-    res.status(500).send(error.message);
+    console.log(error);
+    res.status(500).json({ error: "Error at registering" });
   }
 };
 
