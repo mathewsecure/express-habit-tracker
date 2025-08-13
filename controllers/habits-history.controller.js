@@ -10,7 +10,10 @@ const insertCompletionChecks = async (req, res) => {
       "SELECT id FROM habits WHERE user_id=?;",
       [user_id[0].id]
     );
-    const [result] = await pool.query("", []);
+    const [result] = await pool.query(
+      "INSERT INTO completion_history (completion_check,user_id,habit_id) VALUES ?",
+      [habit_ids.map((habit_id) => [0, user_id[0].id, habit_id.id])]
+    );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
     console.log(error);
