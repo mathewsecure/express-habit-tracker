@@ -2,6 +2,7 @@ import { pool } from "../helpers/mysql-config.js";
 
 const insertCompletionChecks = async (req, res) => {
   try {
+    const datePassedFromFrontend = "Wed Aug 13 2025";
     const { email } = req.email;
     const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
       email,
@@ -11,8 +12,15 @@ const insertCompletionChecks = async (req, res) => {
       [user_id[0].id]
     );
     const [result] = await pool.query(
-      "INSERT INTO completion_history (completion_check,user_id,habit_id) VALUES ?",
-      [habit_ids.map((habit_id) => [0, user_id[0].id, habit_id.id])]
+      "INSERT INTO completion_history (completion_check, date,user_id,habit_id) VALUES ?",
+      [
+        habit_ids.map((habit_id) => [
+          0,
+          datePassedFromFrontend,
+          user_id[0].id,
+          habit_id.id,
+        ]),
+      ]
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
