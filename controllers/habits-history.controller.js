@@ -32,7 +32,24 @@ const insertCompletionChecks = async (req, res) => {
   }
 };
 const selectCompletionChecks = async (req, res) => {
-  res.send("hello");
+  try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const { date } = req.body;
+    if (!date) {
+      return res.status(400).json({ error: "Enter all fields" });
+    }
+    const [completion_checks] = await pool.query(
+      "SELECT completion_check FROM completion_history WHERE user_id=? AND date=?",
+      [user_id[0].id, date]
+    );
+    res.json({ completion_checks });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error at getting completion checks" });
+  }
 };
 const updateCompletionCheck = async (req, res) => {
   res.send("hello");
