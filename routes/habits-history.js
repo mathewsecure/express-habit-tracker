@@ -7,7 +7,7 @@ import {
 } from "../controllers/habits-history.controller.js";
 import { middleware } from "../middleware/jwt.middleware.js";
 
-router.get("/", middleware, selectCompletionChecks);
+router.get("/:date", middleware, selectCompletionChecks);
 router.post("/", middleware, insertCompletionChecks);
 router.put("/", middleware, updateCompletionCheck);
 
