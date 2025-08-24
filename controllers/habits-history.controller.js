@@ -37,9 +37,9 @@ const selectCompletionChecks = async (req, res) => {
     const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
       email,
     ]);
-    const { date } = req.body;
+    const { date } = req.params;
     if (!date) {
-      return res.status(400).json({ error: "Enter all fields" });
+      return res.status(400).json({ error: "Enter date as params" });
     }
     const [completion_checks] = await pool.query(
       "SELECT completion_check FROM completion_history WHERE user_id=? AND date=?",
