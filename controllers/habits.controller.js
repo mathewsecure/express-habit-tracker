@@ -46,7 +46,7 @@ const updateHabitCompletion = async (req, res) => {
     ]);
     const { id } = req.params;
     if (!id) {
-      return res.status(400).json({ error: "Enter habit id" });
+      return res.status(400).json({ error: "Enter habit id as params" });
     }
     const [result] = await pool.query(
       "UPDATE habits SET completed=NOT completed WHERE id=? AND user_id=?",
