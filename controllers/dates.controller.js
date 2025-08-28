@@ -18,7 +18,24 @@ const selectDates = async (req, res) => {
 };
 
 const insertDates = async (req, res) => {
-  res.send("post");
+  try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const { date } = req.params;
+    if (!date) {
+      return res.status(400).json({ error: "Enter all fields" });
+    }
+    const [result] = await pool.query(
+      "INSERT INTO habits (habit, completed, user_id) VALUES (?, ?, ?)",
+      [habit, completed, user_id[0].id]
+    );
+    res.status(201).json({ affectedRows: result.affectedRows });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error at inserting habit" });
+  }
 };
 
 export { selectDates, insertDates };
