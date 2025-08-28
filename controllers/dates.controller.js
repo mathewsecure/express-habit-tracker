@@ -25,16 +25,16 @@ const insertDates = async (req, res) => {
     ]);
     const { date } = req.params;
     if (!date) {
-      return res.status(400).json({ error: "Enter all fields" });
+      return res.status(400).json({ error: "Enter the date as param" });
     }
     const [result] = await pool.query(
-      "INSERT INTO habits (habit, completed, user_id) VALUES (?, ?, ?)",
-      [habit, completed, user_id[0].id]
+      "INSERT INTO dates(date,user_id) VALUES (?,?)",
+      [date, user_id[0].id]
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Error at inserting habit" });
+    res.status(500).json({ error: "Error at inserting dates" });
   }
 };
 
