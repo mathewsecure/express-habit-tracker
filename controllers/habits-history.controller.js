@@ -52,7 +52,25 @@ const selectCompletionChecks = async (req, res) => {
   }
 };
 const updateCompletionCheck = async (req, res) => {
-  res.send("hello");
+  const dateTest = "2025-08-23";
+  try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "Enter habit id as params" });
+    }
+    const [result] = await pool.query(
+      "UPDATE completion_history SET completion_check=NOT completion_check WHERE date=? AND user_id=? AND id=?",
+      [dateTest, user_id[0].id, id]
+    );
+    res.status(201).json({ affectedRows: result.affectedRows });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error at updating habit completion" });
+  }
 };
 
 export {
