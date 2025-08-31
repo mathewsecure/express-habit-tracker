@@ -69,7 +69,7 @@ const updateCompletionCheck = async (req, res) => {
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Error at updating habit completion" });
+    res.status(500).json({ error: "Error at updating habit completion check" });
   }
 };
 
