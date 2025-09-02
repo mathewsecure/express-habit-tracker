@@ -73,8 +73,26 @@ const updateCompletionCheck = async (req, res) => {
   }
 };
 
+const selectAllCompletionChecks = async (req, res) => {
+  try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const [completion_checks] = await pool.query(
+      "SELECT * FROM completion_history WHERE user_id=?",
+      [user_id[0].id]
+    );
+    res.json({ completion_checks });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error at getting all completion checks" });
+  }
+};
+
 export {
   insertCompletionChecks,
   selectCompletionChecks,
   updateCompletionCheck,
+  selectAllCompletionChecks,
 };
