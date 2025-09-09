@@ -32,6 +32,7 @@ const insertCompletionChecks = async (req, res) => {
   }
 };
 const selectCompletionChecks = async (req, res) => {
+  //todo: delete
   try {
     const { email } = req.email;
     const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
