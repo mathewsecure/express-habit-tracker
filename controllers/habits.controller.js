@@ -37,7 +37,7 @@ const insertHabit = async (req, res) => {
     res.status(500).json({ error: "Error at inserting habit" });
   }
 };
-
+// todo: delete
 const updateHabitCompletion = async (req, res) => {
   try {
     const { email } = req.email;
