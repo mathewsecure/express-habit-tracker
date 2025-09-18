@@ -81,7 +81,7 @@ const selectAllCompletionChecks = async (req, res) => {
       email,
     ]);
     const [completion_checks] = await pool.query(
-      "SELECT id, completion_check FROM completion_history WHERE user_id=?",
+      "SELECT id, completion_check, habit_id FROM completion_history WHERE user_id=?",
       [user_id[0].id]
     );
     res.json({ completion_checks });
