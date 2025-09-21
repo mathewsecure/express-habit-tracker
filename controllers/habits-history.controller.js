@@ -31,27 +31,7 @@ const insertCompletionChecks = async (req, res) => {
     res.status(500).json({ error: "Error at inserting completion checks" });
   }
 };
-const selectCompletionChecks = async (req, res) => {
-  //todo: delete
-  try {
-    const { email } = req.email;
-    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
-      email,
-    ]);
-    const { date } = req.params;
-    if (!date) {
-      return res.status(400).json({ error: "Enter date as params" });
-    }
-    const [completion_checks] = await pool.query(
-      "SELECT completion_check FROM completion_history WHERE user_id=? AND date=?",
-      [user_id[0].id, date]
-    );
-    res.json({ completion_checks });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Error at getting completion checks" });
-  }
-};
+
 const updateCompletionCheck = async (req, res) => {
   const dateTest = "2025-08-23";
   try {
@@ -93,7 +73,6 @@ const selectAllCompletionChecks = async (req, res) => {
 
 export {
   insertCompletionChecks,
-  selectCompletionChecks,
   updateCompletionCheck,
   selectAllCompletionChecks,
 };
