@@ -37,27 +37,6 @@ const insertHabit = async (req, res) => {
     res.status(500).json({ error: "Error at inserting habit" });
   }
 };
-// todo: delete
-const updateHabitCompletion = async (req, res) => {
-  try {
-    const { email } = req.email;
-    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
-      email,
-    ]);
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ error: "Enter habit id as params" });
-    }
-    const [result] = await pool.query(
-      "UPDATE habits SET completed=NOT completed WHERE id=? AND user_id=?",
-      [id, user_id[0].id]
-    );
-    res.status(201).json({ affectedRows: result.affectedRows });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Error at updating habit completion" });
-  }
-};
 
 const updateHabitName = async (req, res) => {
   try {
@@ -107,10 +86,4 @@ const deleteHabit = async (req, res) => {
     res.status(500).json({ error: "Error at deleting habit" });
   }
 };
-export {
-  selectHabits,
-  insertHabit,
-  updateHabitCompletion,
-  updateHabitName,
-  deleteHabit,
-};
+export { selectHabits, insertHabit, updateHabitName, deleteHabit };
