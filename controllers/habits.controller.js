@@ -17,6 +17,11 @@ const selectHabits = async (req, res) => {
   }
 };
 
+/**
+ * todos:
+ * 1. if habits==10 return
+ * 2. Remove completed req.body param
+ */
 const insertHabit = async (req, res) => {
   try {
     const { email } = req.email;

@@ -33,7 +33,7 @@ const insertCompletionChecks = async (req, res) => {
 };
 
 const updateCompletionCheck = async (req, res) => {
-  const dateTest = "2025-08-23";
+  const dateTest = "2025-09-21";
   try {
     const { email } = req.email;
     const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
@@ -54,6 +54,7 @@ const updateCompletionCheck = async (req, res) => {
   }
 };
 
+//todo: select them ordering them, the same way habits are selected at habit  controller
 const selectAllCompletionChecks = async (req, res) => {
   try {
     const { email } = req.email;
