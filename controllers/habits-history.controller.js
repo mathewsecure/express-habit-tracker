@@ -33,19 +33,25 @@ const insertCompletionChecks = async (req, res) => {
 };
 
 const updateCompletionCheck = async (req, res) => {
-  const dateTest = "2025-09-21";
+  const dateTest = "2025-09-24"; //add date as body
   try {
     const { email } = req.email;
     const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
       email,
     ]);
     const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ error: "Enter habit id as params" });
+    const { date } = req.body;
+    if (!id || !date) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "Fields missing: enter habit id as param and enter date to body",
+        }); //todo: error message not showing
     }
     const [result] = await pool.query(
       "UPDATE completion_history SET completion_check=NOT completion_check WHERE date=? AND user_id=? AND id=?",
-      [dateTest, user_id[0].id, id]
+      [date, user_id[0].id, id]
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
