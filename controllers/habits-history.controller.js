@@ -39,15 +39,11 @@ const updateCompletionCheck = async (req, res) => {
     const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
       email,
     ]);
-    const { id } = req.params;
-    const { date } = req.body;
+    const { id, date } = req.body;
     if (!id || !date) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Fields missing: enter habit id as param and enter date to body",
-        }); //todo: error message not showing
+      return res.status(400).json({
+        error: "Fields missing: enter habit id and date to body",
+      }); //todo: error message not showing
     }
     const [result] = await pool.query(
       "UPDATE completion_history SET completion_check=NOT completion_check WHERE date=? AND user_id=? AND id=?",

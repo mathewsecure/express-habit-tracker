@@ -8,7 +8,7 @@ import {
 import { middleware } from "../middleware/jwt.middleware.js";
 
 router.post("/", middleware, insertCompletionChecks);
-router.put("/:id", middleware, updateCompletionCheck);
+router.put("/", middleware, updateCompletionCheck);
 router.get("/", middleware, selectAllCompletionChecks);
 
 export { router };

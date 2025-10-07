@@ -10,7 +10,6 @@ import { router as dates } from "./routes/dates.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// set json available in request's body
 app.use(express.json());
 app.use(cors());
 
