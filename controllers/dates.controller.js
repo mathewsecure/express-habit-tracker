@@ -27,6 +27,15 @@ const insertDates = async (req, res) => {
     if (!date) {
       return res.status(400).json({ error: "Enter the date as param" });
     }
+    const [existing] = await pool.query(
+      "SELECT id FROM dates WHERE date=? AND user_id=?",
+      [date, user_id[0].id]
+    );
+    if (existing.length > 0) {
+      return res
+        .status(409)
+        .json({ error: "Date already exists for this user" });
+    }
     const [result] = await pool.query(
       "INSERT INTO dates(date,user_id) VALUES (?,?)",
       [date, user_id[0].id]

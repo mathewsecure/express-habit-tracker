@@ -23,12 +23,14 @@ const insertCompletionChecks = async (req, res) => {
         "INSERT INTO completion_history (completion_check, date,user_id,habit_id) VALUES ?",
         [habit_ids.map((habit_id) => [0, date, user_id[0].id, habit_id.id])]
       );
-      res.status(201).json({ affectedRows: result.affectedRows });
+      return res.status(201).json({ affectedRows: result.affectedRows });
     }
-    res.status(201).json({ affectedRows: 0 });
+    return res.status(201).json({ affectedRows: 0 });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Error at inserting completion checks" });
+    return res
+      .status(500)
+      .json({ error: "Error at inserting completion checks" });
   }
 };
 
