@@ -76,8 +76,41 @@ const selectAllCompletionChecks = async (req, res) => {
   }
 };
 
+const selectMonthlyCompletionChecks = async (req, res) => {
+  try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const { month } = req.params; // format: "2026-01"
+    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
+      return res
+        .status(400)
+        .json({ error: "Enter a valid month format (YYYY-MM)" });
+    }
+    const [completionSums] = await pool.query(
+      `SELECT habit_id, SUM(completion_check) AS total_completions 
+       FROM completion_history 
+       WHERE user_id = ? AND DATE_FORMAT(date, '%Y-%m') = ? 
+       GROUP BY habit_id 
+       ORDER BY habit_id ASC`,
+      [user_id[0].id, month]
+    );
+    const result = {
+      [month]: completionSums.map((row) => Number(row.total_completions)),
+    };
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "Error at getting monthly completion checks" });
+  }
+};
+
 export {
   insertCompletionChecks,
   updateCompletionCheck,
   selectAllCompletionChecks,
+  selectMonthlyCompletionChecks,
 };
