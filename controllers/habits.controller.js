@@ -49,15 +49,15 @@ const updateHabitName = async (req, res) => {
     const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
       email,
     ]);
-    const { id, habitNameReplacement } = req.body;
-    if (!id || !habitNameReplacement) {
+    const { habitId, habitNameReplacement } = req.body;
+    if (!habitId || !habitNameReplacement) {
       return res
         .status(400)
         .json({ error: "Enter habit id and habit name replacement" });
     }
     const [result] = await pool.query(
       "UPDATE habits SET habit=? WHERE id=? AND user_id=?",
-      [habitNameReplacement, id, user_id[0].id]
+      [habitNameReplacement, habitId, user_id[0].id]
     );
     res.status(201).json({ affectedRows: result.affectedRows });
   } catch (error) {
