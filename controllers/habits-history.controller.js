@@ -122,7 +122,7 @@ const selectAllStreaks = async (req, res) => {
       `SELECT habit_id, completion_check 
        FROM completion_history 
        WHERE user_id = ? 
-       ORDER BY habit_id, date DESC`,
+       ORDER BY date DESC`,
       [user_id[0].id]
     );
     const streaks = habits.map((h) => {
