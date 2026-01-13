@@ -108,9 +108,43 @@ const selectMonthlyCompletionChecks = async (req, res) => {
   }
 };
 
+const selectAllStreaks = async (req, res) => {
+  try {
+    const { email } = req.email;
+    const [user_id] = await pool.query("SELECT id FROM users WHERE email=?", [
+      email,
+    ]);
+    const [habits] = await pool.query(
+      "SELECT id, habit FROM habits WHERE user_id=?",
+      [user_id[0].id]
+    );
+    const [history] = await pool.query(
+      `SELECT habit_id, completion_check 
+       FROM completion_history 
+       WHERE user_id = ? 
+       ORDER BY habit_id, date DESC`,
+      [user_id[0].id]
+    );
+    const streaks = habits.map((h) => {
+      const rows = history.filter((r) => r.habit_id === h.id);
+      let streak = 0;
+      for (let r of rows) {
+        if (r.completion_check === 1) streak++;
+        else break;
+      }
+      return { habit: h.habit, streak };
+    });
+    res.json(streaks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error at getting streaks" });
+  }
+};
+
 export {
   insertCompletionChecks,
   updateCompletionCheck,
   selectAllCompletionChecks,
   selectMonthlyCompletionChecks,
+  selectAllStreaks,
 };
