@@ -10,7 +10,7 @@ npm install
 ### 2. Environment variables
 Create a `.env` file in the root directory:
 ```env
-PORT=3306
+PORT=3000
 
 DBHOST=localhost
 DBUSER=your_user_here
