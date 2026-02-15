@@ -1,4 +1,53 @@
-# Project: express-habit-tracker
+# Habit tracker REST API setup/endpoints
+
+## Setup
+
+### 1. Dependencies
+```bash
+npm install
+```
+
+### 2. Environment variables
+Create a `.env` file in the root directory:
+```env
+PORT=3306
+
+DBHOST=localhost
+DBUSER=your_user_here
+DBPASSWORD=your_db_password_here
+DBNAME=habit_tracker
+DBPORT=3306
+
+ACCESS_TOKEN_SECRET=your_jwt_token_here
+```
+
+### 3. Database secrets
+Create the following files in `database/secrets/`:
+
+```bash
+# database/secrets/db_password.txt
+your_db_password_here
+
+# database/secrets/db_root_host.txt
+your_db_root_host_here
+
+# database/secrets/db_root_password.txt
+your_root_password_here
+```
+
+### 4. MySQL database
+```bash
+cd database
+docker compose --env-file ../.env up -d
+```
+
+### 5. Run app for development
+```bash
+npx nodemon index.js
+```
+
+# Endpoints: express-habit-tracker
+
 # 📁 Collection: auth 
 
 ## End-point: login

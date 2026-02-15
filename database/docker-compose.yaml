@@ -1,0 +1,28 @@
+services:
+  mysql:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_HOST_FILE: /run/secrets/db_root_host
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_USER: ${DBUSER}
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_DATABASE: ${DBNAME}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./ddl.sql:/docker-entrypoint-initdb.d/ddl.sql
+    secrets:
+      - db_root_host
+      - db_root_password
+      - db_password
+secrets:
+  db_root_host:
+    file: ./secrets/db_root_host.txt
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+  db_password:
+    file: ./secrets/db_password.txt
+volumes:
+  mysql_data:
